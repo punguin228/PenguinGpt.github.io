@@ -125,7 +125,7 @@ async function loadChat() {
 <li>Обрабатываю файлы (изображения, аудио, PDF).</li>
 <li>Пишу код и выполняю многоэтапные задачи (напиши "напиши рассказ, затем сгенерируй его иллюстрацию").</li>
 </ul>
-<p>Меня создал <a href="https://t.me/pepegin" target="_blank" rel="noopener noreferrer">tg: @pepegin</a>.</p>
+<p>Меня создал <a href="https://t.me/Pepegin_xd" target="_blank" rel="noopener noreferrer">tg: @Pepegin_xd</a>.</p>
 `;
     const welcomeEl = addMessage(welcomeText, 'bot', false, true);
     welcomeEl.classList.add('welcome-message');
@@ -634,7 +634,7 @@ document.querySelector('.sidebar button[aria-label="Очистить чат"]').
 <li>Обрабатываю файлы (изображения, аудио, PDF).</li>
 <li>Пишу код и выполняю многоэтапные задачи (напиши "напиши рассказ, затем сгенерируй его иллюстрацию").</li>
 </ul>
-<p>Меня создал <a href="https://t.me/pepegin" target="_blank" rel="noopener noreferrer">tg: @pepegin</a>.</p>
+<p>Меня создал <a href="https://t.me/Pepegin_xd" target="_blank" rel="noopener noreferrer">tg: @Pepegin_xd</a>.</p>
 `;
   const welcomeEl = addMessage(welcomeText, 'bot', false, true);
   welcomeEl.classList.add('welcome-message');
