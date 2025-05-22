@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pepegin GPT</title>
+  <!-- Google Fonts: Inter and Roboto Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Pepegin GPT">
+  <meta property="og:description" content="Искусственный интеллект от Pepegin GPT 🗨️">
+  <meta property="og:image" content="ai.png">
+  <meta property="og:url" content="./">
+  <meta property="og:type" content="website">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pepegin GPT">
+  <meta name="twitter:description" content="Искусственный интеллект от Pepegin GPT 🗨️">
+  <meta name="twitter:image" content="ai.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: #12171D;
+      color: #E9ECEF;
+    }
+    body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      grid-template-rows: auto 1fr auto;
+    }
+    header {
+      grid-column: 1 / -1;
+      background: linear-gradient(180deg, #1E252B 0%, #12171D 100%);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+    .powered-by {
+      font-size: 0.85rem;
+      color: #A0A8B3;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .powered-by:hover {
+      color: #FFFFFF;
+    }
+    .sidebar {
+      grid-row: 2 / -1;
+      background-color: #1E252B;
+      padding: 1.5rem 1rem;
+      border-right: 1px solid #2D353F;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .sidebar h2 {
+      font-size: 1rem;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+    }
+    .sidebar button {
+      background-color: #2D353F;
+      color: #E9ECEF;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    .sidebar button:hover {
+      background-color: #FFFFFF;
+      color: #12171D;
+    }
+    .sidebar button:active {
+      transform: scale(0.98);
+    }
+    #chat {
+      grid-row: 2 / 3;
+      grid-column: 2 / -1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background-color: #12171D;
+    }
+    .message-container {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      max-width: 80%;
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .bot {
+      justify-content: flex-start;
+      margin-right: auto;
+    }
+    .user {
+      justify-content: flex-end;
+      margin-left: auto;
+      flex-direction: row-reverse;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      background-color: #2D353F;
+      color: #E9ECEF;
+    }
+    .message-content {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-width: calc(100% - 50px);
+      position: relative;
+    }
+    .bot .message-content {
+      background-color: #1E252B;
+      color: #E9ECEF;
+      border-radius: 12px 12px 12px 4px;
+    }
+    .user .message-content {
+      background-color: #FFFFFF;
+      color: #12171D;
+      border-radius: 12px 12px 4px 12px;
+    }
+    .message-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+    @media (min-width: 1024px) {
+      .message-content img {
+        max-width: 500px;
+      }
+    }
+    .message-content .copy-btn {
+      background: none;
+      border: none;
+      color: #A0A8B3;
+      cursor: pointer;
+      font-size: 0.85rem;
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .message-content .copy-btn:hover {
+      color: #FFFFFF;
+    }
+    .message-content .copy-btn.copied {
+      color: #FFFFFF;
+    }
+    .message-content .copy-btn:active {
+      transform: scale(1.2);
+    }
+    .message-content pre {
+      background-color: #2D353F;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    .message-content code {
+      font-family: 'Roboto Mono', monospace;
+    }
+    .custom-audio-player {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #1E252B;
+      padding: 0.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .custom-audio-player .play-pause-btn {
+      background-color: #FFFFFF;
+      color: #12171D;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .custom-audio-player .play-pause-btn:hover {
+      transform: scale(1.05);
+    }
+    .custom-audio-player .progress-container {
+      flex: 1;
+      height: 5px;
+      background-color: #2D353F;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .custom-audio-player .progress-bar {
+      width: 0;
+      height: 100%;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+    .custom-audio-player .time-display {
+      font-size: 0.8rem;
+      color: #E9ECEF;
+      min-width: 70px;
+      text-align: right;
+    }
+    #messageForm {
+      grid-column: 2 / -1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background-color: #1E252B;
+      border-top: 1px solid #2D353F;
+      position: relative;
+    }
+    #messageInput {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #2D353F;
+      color: #E9ECEF;
+      outline: none;
+      transition: box-shadow 0.2s ease;
+    }
+    #messageInput:focus {
+      box-shadow: 0 0 0 2px #FFFFFF;
+    }
+    #micButton, #emojiButton, #fileButton, #messageForm button[type="submit"] {
+      background-color: #FFFFFF;
+      color: #12171D;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    #micButton:hover, #emojiButton:hover, #fileButton:hover, #messageForm button[type="submit"]:hover {
+      background-color: #E9ECEF;
+      transform: scale(1.05);
+    }
+    #micButton.recording {
+      animation: pulseRecording 1s infinite;
+    }
+    @keyframes pulseRecording {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+    .message-content .fa-spinner {
+      font-size: 1.2rem;
+      color: #FFFFFF;
+    }
+    .welcome-message .message-content {
+      background-color: #1E252B;
+      border: 1px solid #FFFFFF;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    .message-content h2 {
+      font-size: 1.25rem;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+    }
+    .message-content p {
+      margin: 0.5rem 0;
+    }
+    .message-content ul {
+      padding-left: 1.5rem;
+      margin: 0.5rem 0;
+    }
+    .message-content li {
+      margin-bottom: 0.25rem;
+    }
+    .message-content a {
+      color: #A0A8B3;
+      text-decoration: none;
+    }
+    .message-content a:hover {
+      color: #FFFFFF;
+    }
+    #emojiPicker {
+      position: absolute;
+      bottom: 4.5rem;
+      left: 3rem;
+      background-color: #1E252B;
+      border: 1px solid #2D353F;
+      border-radius: 8px;
+      padding: 0.5rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 250px;
+      z-index: 10;
+    }
+    #emojiPicker .emoji-category {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    #emojiPicker .emoji-category h3 {
+      font-size: 0.9rem;
+      color: #FFFFFF;
+      width: 100%;
+      margin-bottom: 0.25rem;
+    }
+    #emojiPicker span {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #emojiPicker span:hover {
+      transform: scale(1.2);
+    }
+    .file-preview {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1E252B;
+      border: 1px solid #FFFFFF;
+      border-radius: 8px;
+      padding: 1rem;
+      max-width: 80%;
+      max-height: 80%;
+      overflow: auto;
+      z-index: 20;
+      display: none;
+    }
+    .file-preview img, .file-preview video {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .file-preview iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .file-preview .close-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    body.light-theme {
+      background-color: #F8F9FA;
+      color: #212529;
+    }
+    body.light-theme header,
+    body.light-theme .sidebar,
+    body.light-theme #messageForm {
+      background-color: #FFFFFF;
+      border-color: #DEE2E6;
+    }
+    body.light-theme #chat {
+      background-color: #F1F3F5;
+    }
+    body.light-theme .bot .message-content {
+      background-color: #FFFFFF;
+      color: #212529;
+    }
+    body.light-theme .user .message-content {
+      background-color: #E9ECEF;
+      color: #212529;
+    }
+    body.light-theme .message-content pre {
+      background-color: #E9ECEF;
+    }
+    body.light-theme #messageInput {
+      background-color: #FFFFFF;
+      color: #212529;
+    }
+    body.light-theme #micButton,
+    body.light-theme #emojiButton,
+    body.light-theme #fileButton,
+    body.light-theme #messageForm button[type="submit"],
+    body.light-theme .sidebar button {
+      background-color: #FFFFFF;
+      color: #212529;
+    }
+    body.light-theme #micButton:hover,
+    body.light-theme #emojiButton:hover,
+    body.light-theme #fileButton:hover,
+    body.light-theme #messageForm button[type="submit"]:hover,
+    body.light-theme .sidebar button:hover {
+      background-color: #DEE2E6;
+    }
+    body.light-theme .logo,
+    body.light-theme .powered-by,
+    body.light-theme .message-content a,
+    body.light-theme .message-content h2 {
+      color: #212529;
+    }
+    body.light-theme .message-content .copy-btn {
+      color: #6C757D;
+    }
+    body.light-theme .message-content .copy-btn:hover,
+    body.light-theme .message-content .copy-btn.copied {
+      color: #212529;
+    }
+    body.light-theme .welcome-message .message-content {
+      border-color: #212529;
+    }
+    body.light-theme #emojiPicker,
+    body.light-theme .file-preview {
+      background-color: #FFFFFF;
+      border-color: #DEE2E6;
+    }
+    @media (max-width: 900px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      #messageForm {
+        grid-column: 1 / -1;
+      }
+    }
+    @media (max-width: 600px) {
+      #messageForm {
+        flex-wrap: wrap;
+        padding: 0.75rem;
+      }
+      #micButton, #emojiButton, #fileButton, #messageForm button[type="submit"] {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      #messageInput {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .message-content {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+      }
+      .custom-audio-player .play-pause-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+      }
+      .custom-audio-player .time-display {
+        font-size: 0.75rem;
+        min-width: 60px;
+      }
+      #emojiPicker {
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">Pepegin GPT</span>
+    <a href="https://t.me/pepegin" class="powered-by" aria-label="Powered by Pepegin GPT">Powered by Pepegin GPT</a>
+  </header>
+  <aside class="sidebar">
+    <h2>Настройки</h2>
+    <button aria-label="Переключить тему"><i class="fas fa-moon"></i> Тема</button>
+    <button aria-label="Очистить чат"><i class="fas fa-trash"></i> Очистить чат</button>
+    <button aria-label="Открыть справку"><i class="fas fa-question-circle"></i> Справка</button>
+  </aside>
+  <div id="chat"></div>
+  <form id="messageForm">
+    <button type="button" id="micButton" aria-label="Активировать микрофон"><i class="fas fa-microphone"></i></button>
+    <button type="button" id="emojiButton" aria-label="Добавить эмодзи"><i class="fas fa-smile"></i></button>
+    <button type="button" id="fileButton" aria-label="Прикрепить файл"><i class="fas fa-paperclip"></i></button>
+    <input type="text" id="messageInput" placeholder="Введите сообщение..." aria-label="Поле ввода сообщения">
+    <button type="submit" aria-label="Отправить сообщение"><i class="fas fa-paper-plane"></i></button>
+    <div id="emojiPicker"></div>
+  </form>
+  <div id="filePreview" class="file-preview">
+    <button class="close-btn" aria-label="Закрыть превью"><i class="fas fa-times"></i></button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
