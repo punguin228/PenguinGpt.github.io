@@ -1,2 +1,2 @@
-# PenguinGpt.github.io
+punguin228.github.io
 Чат гпт 
